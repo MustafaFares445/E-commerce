@@ -17,9 +17,21 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $categories = Category::all();
+        //select * from category
+        //preparing category query
+        $query = Category::query();
+
+        if ($name = $request->query('name')){
+            $query->where('name' , 'LIKE' , "%{$name}%");
+        }
+
+        if ($status = $request->query('status')){
+            $query->where('status' , $status);
+        }
+
+        $categories = $query->paginate(10);
 
         return $this->successResponse('categories' , $categories);
     }
