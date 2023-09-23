@@ -32,9 +32,15 @@ trait ApiResponse
         return response()->json(['success' => $msg, 'status' => $status] , $status);
     }
 
-    protected function errorResponse($message,  int $status = 400): JsonResponse
+    protected function errorResponse($errors, string $message  , int $status = 400): JsonResponse
     {
-        return response()->json(['error' => $message, 'status' => $status], $status);
+        $response = [
+            'status' => $status,
+            'massage' => $message,
+            'errors' => $errors
+        ];
+
+        return response()->json($response , $status);
     }
 
     public function getCurrentLang()
@@ -68,8 +74,8 @@ trait ApiResponse
 
     }
 
-    public function returnValidationError($validator , $code = 422): JsonResponse
+    public function returnValidationError($validator , $status = 422): JsonResponse
     {
-        return $this->errorResponse($validator->errors()->first() , $code);
+        return $this->errorResponse($validator->errors() , "validation error" , $status);
     }
 }
