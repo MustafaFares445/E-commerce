@@ -14,12 +14,19 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
-            $table->foreignId('store_id')->nullable()->constrained('stores')->nullOnDelete();
+            $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
             $table->foreignId('tag_id')->nullable()->constrained('tags')->nullOnDelete();
             $table->string('name');
+            $table->string('image')->nullable();
             $table->string('slug')->unique();
             $table->string('description')->nullable();
-            $table->bigInteger('price')->nullable();
+            $table->float('price')->default(0);
+            $table->float('compare_price');
+            $table->json('options')->nullable();
+            $table->float('rating')->default(0);
+            $table->boolean('featured')->default(0);
+            $table->enum('status' , ['active' , 'draft' , 'archived'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

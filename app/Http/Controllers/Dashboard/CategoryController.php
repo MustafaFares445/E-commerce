@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -21,15 +20,8 @@ class CategoryController extends Controller
     {
         //select * from category
         //preparing category query
-        $query = Category::query();
+        $query = Category::query()->orderBy('name');
 
-        if ($name = $request->query('name')){
-            $query->where('name' , 'LIKE' , "%{$name}%");
-        }
-
-        if ($status = $request->query('status')){
-            $query->where('status' , $status);
-        }
 
         $categories = $query->paginate(10);
 
@@ -92,8 +84,36 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): JsonResponse
     {
-        $this->deleteFile($category , 'image');
+
         $category->delete();
+
+        return $this->showMessage('category has been deleted' , 200);
+    }
+
+    public function trash(): JsonResponse
+    {
+        $categories = Category::onlyTrashed()->paginate(10);
+
+        return $this->successResponse('categories' , $categories);
+    }
+
+    public function restore(Request $request ,int  $id): JsonResponse
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+
+        $category->restore();
+
+        return $this->showMessage('The Category has been restored' , 200);
+    }
+
+    public function forceDelete(int $id): JsonResponse
+    {
+
+        $category = Category::onlyTrashed()->findOrFail($id);
+
+        $this->deleteFile($category , 'image');
+
+        $category->forceDelete();
 
         return $this->showMessage('category has been deleted' , 200);
     }
