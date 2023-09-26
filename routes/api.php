@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +31,7 @@ Route::apiResource('categories' , CategoryController::class);
 
 
 Route::apiResource('products' , ProductController::class);
+
+Route::patch('profile' , [ProfileController::class , 'update']);
+
+Route::apiResource('tags' , TagController::class);
