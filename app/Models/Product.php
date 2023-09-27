@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Models\OrderItem;
 /**
  * @method static paginate(int $int)
  * @method static create(array $all)
  * @method static where(string $string, mixed $param)
+ * @method static find(mixed $id)
  */
 class Product extends Model
 {
@@ -49,5 +50,10 @@ class Product extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class , 'product_tag');
+    }
+
+    public function orderItems()
+    {
+        return $this->belongsTo(OrderItem::class);
     }
 }

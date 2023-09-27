@@ -35,3 +35,4 @@ Route::apiResource('products' , ProductController::class);
 Route::patch('profile' , [ProfileController::class , 'update']);
 
 Route::apiResource('tags' , TagController::class);
+Route::apiResource('cart' , \App\Http\Controllers\Front\CartController::class)->except('show');
