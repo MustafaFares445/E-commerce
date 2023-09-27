@@ -30,7 +30,7 @@ class CartController extends Controller
 
         $total = $this->cart->total();
 
-        return  $this->successResponse('item' , ItemResource::make($item->product , $total));
+        return  $this->successResponse('items' , ItemResource::collection($item , $total));
 
     }
 

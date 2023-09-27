@@ -10,7 +10,7 @@ interface CartRepository
 {
     public function get() : Collection;
 
-    public function add(Product $product , $quantity = 0):Cart;
+    public function add(Product $product , $quantity = 0);
 
     public function update(Product $product , $quantity);
 

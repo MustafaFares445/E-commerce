@@ -52,8 +52,8 @@ class Product extends Model
         return $this->belongsToMany(Tag::class , 'product_tag');
     }
 
-    public function orderItems()
+    public function orders()
     {
-        return $this->belongsTo(OrderItem::class);
+        return $this->belongsToMany(Order::class);
     }
 }

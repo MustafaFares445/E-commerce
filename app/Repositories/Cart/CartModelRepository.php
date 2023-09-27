@@ -27,12 +27,15 @@ class CartModelRepository implements CartRepository
             ->first();
 
         if (!$item){
-          return  Cart::create([
+            $cart = Cart::create([
                 'cookie_id' => $this->getCookieId(),
                 'user_id' => Auth::id(),
                 'product_id' => $product->id,
                 'quantity' => $quantity,
             ]);
+
+            $this->get()->push($cart);
+            return $cart;
         }
 
        return $item->increment('quantity' , $quantity);
